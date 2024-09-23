@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+        }
+        #videoList {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+        }
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .instructions {
+            background-color: #e7f3fe;
+            border-left: 6px solid #2196F3;
+            padding: 10px;
+            margin-bottom: 20px;
+        }
+        footer {
+            margin-top: 20px;
+            padding: 10px;
+            text-align: center;
+            background-color: #333;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>Student's Portal</h1>
+    
+    <div class="instructions">
+        <h2>Instructions for Uploading Videos</h2>
+        <p>To watch a video, please use the signup step provided in the hompage. Ensure that your video file is in a supported format (e.g., MP4, AVI, MOV).</p>
+        <p>Once uploaded, the video will appear in the list below. You can click on the video name to watch it.</p>
+    </div>
+
+    <input type="text" id="searchBar" placeholder="Search for videos..." onkeyup="searchVideos()">
+    
+    <h2>Uploaded Videos</h2>
+    <ol id="videoList">
+        <!-- Video names will be inserted here -->
+    </ol>
+
+    <script src="script.js"></script>
+    <script>
+        // Fetch video data from the server
+        async function fetchVideos() {
+            const response = await fetch('/api/videos'); // Updated endpoint
+            const videos = await response.json();
+            displayVideos(videos);
+        }
+
+        function displayVideos(videos) {
+            const videoList = document.getElementById('videoList');
+            videoList.innerHTML = ''; // Clear existing content
+            videos.forEach(video => {
+                const listItem = document.createElement('li');
+                const nameLink = document.createElement('a');
+                nameLink.href = `uploads/${video}`; // Link to the video file
+                nameLink.innerText = video; // Set the link text to the video name
+                listItem.appendChild(nameLink); // Append the link to the list item
+                videoList.appendChild(listItem); // Append the list item to the ordered list
+            });
+        }
+
+        // Call fetchVideos on page load
+        fetchVideos();
+    </script>
+
+    <footer>
+        <p>&copy; 2023 Video Upload Service. All rights reserved.</p>
+    </footer>
+</body>
+</html>
